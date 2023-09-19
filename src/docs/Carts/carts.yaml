@@ -1,0 +1,18 @@
+# CREDENCIAL ADMIN: 
+# email: "adminCoder@gmail.com", "password": "AdM1nC0d3R2022"
+
+# CREDENCIAL USER PREMIUM: 
+# "email": "premium@gmail.com", "password": "Premium1234"
+
+# CREDENCIAL: 
+# email: "user@gmail.com", "password": "User1234"
+
+# paths:
+
+components:
+  securitySchemes:
+  # AUTH - SCHEMA:
+    cookieAuth:      
+      type: apiKey
+      in: cookie
+      name: CoderCookie
