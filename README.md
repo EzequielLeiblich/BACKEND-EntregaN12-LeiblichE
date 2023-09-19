@@ -1,4 +1,4 @@
-# 4ta Práctica Integradora - Integración Avanzada para Ecommerce
+# Desafio N°12 - Documentar API
 
 ## LEIBLICH Ezequiel Gaston
 
@@ -6,43 +6,39 @@
 
 ------------------------------------------------------
 
-# Integración Avanzada para Ecommerce
+## Documentación de API
 
-Este repositorio marca el resultado de una práctica de integración sobre el proyecto de ecommerce existente. Hemos realizado mejoras significativas en varios procesos clave.
+En este repositorio, hemos realizado la documentación de la API de nuestro proyecto final utilizando Swagger para proporcionar una guía clara y detallada sobre los módulos de productos y carritos.
 
-## Recuperación de Contraseña
+## Documentación de Módulo de Productos
 
-Implementamos un sistema de recuperación de contraseña que permite a los usuarios restablecer su contraseña de manera segura. Las características clave incluyen:
+Hemos creado una documentación completa y exhaustiva para el módulo de productos. Esto incluye:
 
-* Envío de un correo electrónico con un enlace de restablecimiento de contraseña.
-* El enlace expira automáticamente después de 1 hora.
-* Prevención de restablecimiento con la misma contraseña existente.
-* Redirección a una página para generar un nuevo correo de restablecimiento en caso de que el enlace haya expirado.
+ * Descripción general del módulo de productos.
+ * Lista detallada de todos los endpoints disponibles para productos.
+ * Descripción de los parámetros de entrada y salida de cada endpoint.
+ * Ejemplos de solicitud y respuesta para cada endpoint.
 
-## Nuevo Rol "Premium"
+## Documentación de Módulo de Carrito
 
-Hemos introducido un nuevo rol de usuario llamado "premium". Los usuarios con este rol tienen privilegios adicionales, como la capacidad de crear productos.
+También hemos generado una documentación completa para el módulo de carritos. Esta documentación incluye:
 
-## Cambios en el Schema de Producto
+ * Resumen del módulo de carritos.
+ * Lista detallada de todos los endpoints relacionados con carritos.
+ * Descripción de los parámetros que se deben proporcionar en cada solicitud.
+ * Ejemplos de cómo realizar solicitudes y las respuestas esperadas.
 
-Modificamos el schema de producto para incluir un campo "owner" que hace referencia al usuario que creó el producto. Los aspectos importantes son:
+## Exclusión de Documentación de Sesiones
 
-* Si un producto se crea sin un propietario especificado, se establece automáticamente como propiedad del "admin".
-* El campo "owner" almacena el correo electrónico del usuario que creó el producto y solo puede ser establecido por usuarios premium.
+Hemos excluido la documentación de sesiones, ya que se mencionó en la consigna que no era necesario documentar este aspecto.
 
-## Cambios en los Permisos de Modificación y Eliminación de Productos
+## Cómo Acceder a la Documentación
 
-Realizamos cambios en los permisos para garantizar un comportamiento adecuado:
+Para acceder a la documentación detallada de la API, sigue estos pasos:
 
-* Un usuario premium solo puede eliminar los productos que le pertenecen.
-* El "admin" tiene la capacidad de eliminar cualquier producto, incluso si tiene un propietario.
+1. Clone este repositorio en su máquina local si aún no lo ha hecho.
+2. Ejecute el servidor de la aplicación.
+3. Abra un navegador web y vaya a la URL de documentación de Swagger, por lo general, se encuentra en http://localhost:puerto/api-docs.
+4. Explora la documentación interactiva de la API para obtener información detallada sobre los endpoints de productos y carritos.
 
-## Lógica de Carrito
-
-Hemos ajustado la lógica del carrito para que un usuario premium no pueda agregar productos que le pertenecen a su carrito, evitando la duplicación de productos.
-
-## Cambio de Rol de Usuario
-
-Implementamos una nueva ruta en el router de usuarios (/api/users/premium/:uid) que permite cambiar el rol de un usuario entre "user" y "premium".
-
-¡Gracias por revisar estas mejoras avanzadas en mi proyecto de ecommerce! Si tienes alguna pregunta o necesitas asistencia, no dudes en ponerte en contacto conmigo.
+¡Gracias por revisar la documentación de API! Si tienes alguna pregunta o necesitas asistencia adicional, no dudes en ponerte en contacto conmigo.
