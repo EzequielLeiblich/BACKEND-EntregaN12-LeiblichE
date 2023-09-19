@@ -38,7 +38,7 @@ Para acceder a la documentación detallada de la API, sigue estos pasos:
 
 1. Clone este repositorio en su máquina local si aún no lo ha hecho.
 2. Ejecute el servidor de la aplicación.
-3. Abra un navegador web y vaya a la URL de documentación de Swagger, por lo general, se encuentra en http://localhost:puerto/api-docs.
+3. Abra un navegador web y vaya a la URL de documentación de Swagger.
 4. Explora la documentación interactiva de la API para obtener información detallada sobre los endpoints de productos y carritos.
 
 ¡Gracias por revisar la documentación de API! Si tienes alguna pregunta o necesitas asistencia adicional, no dudes en ponerte en contacto conmigo.
