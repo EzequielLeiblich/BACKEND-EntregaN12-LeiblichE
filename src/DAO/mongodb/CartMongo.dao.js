@@ -157,18 +157,34 @@ export default class CartsDAO {
   async updateCart(cid, updatedCartFields) {
     let response = {};
     try {
-      let cart = await cartModel.updateOne({
-        _id: cid
-      }, {
-        $set: updatedCartFields
+      const currentCart = await this.getCartById(cid);
+      const productIdsCart = currentCart.result.products.map((product) => product.product._id.toString());
+      const {
+        products: productsUp,
+        ...restOfCartFields
+      } = updatedCartFields;
+      const allProductsExistWithSameQuantity = productsUp.every((productUp) => {
+        const productIndex = productIdsCart.indexOf(productUp.product);
+        if (productIndex !== -1) {
+          return currentCart.result.products[productIndex].quantity === productUp.quantity;
+        }
+        return false;
       });
-      if (result.matchedCount === 0) {
-        response.status = "not found cart";
-      } else if (result.matchedCount === 1) {
-        await cart.result.save();
-        response.status = "success";
-        response.result = cart;
-      };
+      if (allProductsExistWithSameQuantity) {
+        response.status = "update is equal to current";
+      } else {
+        const cart = await cartModel.updateOne({
+          _id: cid
+        }, {
+          $set: updatedCartFields
+        });
+        if (cart.matchedCount === 0) {
+          response.status = "not found cart";
+        } else if (cart.matchedCount === 1) {
+          response.status = "success";
+          response.result = cart;
+        }
+      }
     } catch (error) {
       response.status = "error";
       response.message = "Error al actualizar el carrito - DAO: " + error.message;
@@ -187,15 +203,22 @@ export default class CartsDAO {
         if (product === undefined) {
           response.status = "not found product";
         } else {
-          product.quantity = quantity;
-          await cart.result.save();
-          response.status = "success";
-          response.result = cart;
+          if (product.quantity === quantity) {
+            response.status = "update is equal to current";
+        } else {
+            product.quantity = quantity;
+            await cart.result.save();
+            response.status = "success";
+            response.result = {
+              productId: pid,
+              newQuantity: product.quantity
+            };
+          };
         };
       };
     } catch (error) {
       response.status = "error";
-      response.message = "Error al actualizar producto en carrito - DAO: " + error.message;
+      response.message = "Error al actualizar el producto en el carrito - DAO: " + error.message;
     };
     return response;
   };

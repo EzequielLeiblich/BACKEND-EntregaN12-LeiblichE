@@ -272,20 +272,32 @@ export default class CartController {
         const cid = req.params.cid;
         const updatedCartFields = req.body;
         try {
-            if (!cid || !mongoose.Types.ObjectId.isValid(cid)) {
+            if (updatedCartFields.tickets) {
                 CustomError.createError({
                     name: "Error al intentar actualizar el carrito.",
-                    cause: ErrorGenerator.generateCidErrorInfo(cid),
-                    message: "El ID de carrito proporcionado no es válido.",
-                    code: ErrorEnums.INVALID_ID_CART_ERROR
-                });
-            } else if (!updatedCartFields.products || Object.keys(updatedCartFields).length === 0) {
+                    cause: ErrorGenerator.generateUpdatedCartForbiddenErrorInfo(),
+                    message: "El cuerpo para el carrito, no es válido.",
+                    code: ErrorEnums.FORBIDDEN_UPDATED_CART_FIELDS
+                })
+            } else if (!updatedCartFields.products || !Array.isArray(updatedCartFields.products) || updatedCartFields.products.length === 0) {
+                const updCartFields = JSON.stringify(updatedCartFields, null, 2);
                 CustomError.createError({
                     name: "Error al intentar actualizar el carrito.",
-                    cause: ErrorGenerator.generateUpdatedCartFieldsErrorInfo(updatedCartFields),
+                    cause: ErrorGenerator.generateUpdatedCartFieldsErrorInfo(updCartFields),
                     message: "No se proporcionó ningún cuerpo para el carrito.",
                     code: ErrorEnums.INVALID_UPDATED_CART_FIELDS
                 })
+            };
+            const invalidProducts = updatedCartFields.products.some((product) => {
+                return !product.product || typeof product.quantity !== "number";
+            });
+            if (invalidProducts) {
+                CustomError.createError({
+                    name: "Error al intentar actualizar el carrito.",
+                    cause: ErrorGenerator.generateUpdatedCartFieldsErrorInfo2(),
+                    message: "Datos de producto incompleto.",
+                    code: ErrorEnums.INVALID_UPDATED_CART_FIELDS
+                });
             };
         } catch (error) {
             return next(error);
@@ -297,7 +309,7 @@ export default class CartController {
             response.message = resultService.message;
             if (resultService.statusCode === 500) {
                 req.logger.error(response.message);
-            } else if (resultService.statusCode === 404) {
+            } else if (resultService.statusCode === 404 || resultService.statusCode === 409) {
                 req.logger.warn(response.message);
             } else if (resultService.statusCode === 200) {
                 response.result = resultService.result;
@@ -341,7 +353,7 @@ export default class CartController {
             response.message = resultService.message;
             if (resultService.statusCode === 500) {
                 req.logger.error(response.message);
-            } else if (resultService.statusCode === 404) {
+            } else if (resultService.statusCode === 404 || resultService.statusCode === 409) {
                 req.logger.warn(response.message);
             } else if (resultService.statusCode === 200) {
                 response.result = resultService.result;
